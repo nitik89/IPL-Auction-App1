@@ -30,7 +30,10 @@ app.use(require("./routes/auction"));
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "*",
+    origin: "*", // Allow all origins
+    methods: ["GET", "POST"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    credentials: true, // Allow credentials (cookies, etc.)
   },
 });
 let teams = [];
