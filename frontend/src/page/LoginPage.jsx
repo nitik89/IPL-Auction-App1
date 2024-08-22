@@ -28,7 +28,7 @@ const LoginPage = () => {
 
   const createRoom = async () => {
     try {
-      const res = await axios.post("http://localhost:8000/create-room");
+      const res = await axios.post("/create-room");
       const { auctionRoom } = res.data;
       setRoomId(auctionRoom._id);
     } catch (err) {

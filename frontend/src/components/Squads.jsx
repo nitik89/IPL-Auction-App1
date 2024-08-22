@@ -24,9 +24,7 @@ const Squads = ({ isOpen, handleClose }) => {
 
   const getSquads = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/get-squad?id=${userDetails.roomId}`
-      );
+      const res = await axios.get(`/get-squad?id=${userDetails.roomId}`);
       const { roomDetails } = res.data;
       console.log("room deta--", roomDetails);
       setSquads(roomDetails);

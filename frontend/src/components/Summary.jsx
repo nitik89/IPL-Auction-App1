@@ -33,9 +33,7 @@ const Summary = ({ isOpen, handleClose }) => {
 
   const getSoldPlayers = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/sold-players?id=${userDetails.roomId}`
-      );
+      const res = await axios.get(`/sold-players?id=${userDetails.roomId}`);
       const { soldPlayers } = res.data;
       setSoldPlayers(soldPlayers);
     } catch (err) {
