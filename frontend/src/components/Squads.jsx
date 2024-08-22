@@ -24,7 +24,9 @@ const Squads = ({ isOpen, handleClose }) => {
 
   const getSquads = async () => {
     try {
-      const res = await axios.get(`/get-squad?id=${userDetails.roomId}`);
+      const res = await axios.get(
+        `https://ipl-auction-j2bv5y0k5-nitik89s-projects.vercel.app/get-squad?id=${userDetails.roomId}`
+      );
       const { roomDetails } = res.data;
       console.log("room deta--", roomDetails);
       setSquads(roomDetails);

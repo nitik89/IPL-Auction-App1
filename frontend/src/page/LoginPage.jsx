@@ -28,7 +28,9 @@ const LoginPage = () => {
 
   const createRoom = async () => {
     try {
-      const res = await axios.post("/create-room");
+      const res = await axios.post(
+        "https://ipl-auction-j2bv5y0k5-nitik89s-projects.vercel.app/create-room"
+      );
       const { auctionRoom } = res.data;
       setRoomId(auctionRoom._id);
     } catch (err) {

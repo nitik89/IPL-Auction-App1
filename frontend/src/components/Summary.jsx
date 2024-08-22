@@ -33,7 +33,9 @@ const Summary = ({ isOpen, handleClose }) => {
 
   const getSoldPlayers = async () => {
     try {
-      const res = await axios.get(`/sold-players?id=${userDetails.roomId}`);
+      const res = await axios.get(
+        `https://ipl-auction-j2bv5y0k5-nitik89s-projects.vercel.app/sold-players?id=${userDetails.roomId}`
+      );
       const { soldPlayers } = res.data;
       setSoldPlayers(soldPlayers);
     } catch (err) {
