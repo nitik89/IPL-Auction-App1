@@ -23,13 +23,19 @@ const server = app.listen(PORT, "::1", () => {
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://ipl-auction-app1.vercel.app/"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 app.use(require("./routes/auction"));
 
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://ipl-auction-app1.vercel.app/"],
   },
 });
 let teams = [];
