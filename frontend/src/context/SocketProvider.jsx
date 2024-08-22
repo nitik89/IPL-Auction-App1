@@ -6,7 +6,7 @@ const SocketContext = createContext();
 export const useSocketContext = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }) => {
-  const ENDPOINT = "http://localhost:8000";
+  const ENDPOINT = "https://ipl-auction-app1.vercel.app/";
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     setSocket(io(ENDPOINT));
