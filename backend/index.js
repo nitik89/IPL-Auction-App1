@@ -24,7 +24,14 @@ const server = app.listen(PORT, "::1", () => {
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // Allow all origins
+    methods: ["GET", "POST"], // Allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    credentials: true, // Allow cookies and other credentials
+  })
+);
 app.use(require("./routes/auction"));
 
 const io = require("socket.io")(server, {
