@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUserContext } from "../context/UserProvider";
 import { useSocketContext } from "../context/SocketProvider";
-import teams from "../teams.json";
+import teams from "./teams.json";
 
 const LoginPage = () => {
   const [teamName, setTeamName] = useState("");
