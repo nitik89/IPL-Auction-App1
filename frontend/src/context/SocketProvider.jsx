@@ -6,11 +6,25 @@ const SocketContext = createContext();
 export const useSocketContext = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }) => {
-  const ENDPOINT = "https://ipl-auction-app1.vercel.app/";
+  const ENDPOINT = "http://localhost:8000";
   const [socket, setSocket] = useState(null);
   useEffect(() => {
-    setSocket(io(ENDPOINT));
-  }, []);
+    // Initialize socket connection
+    const socketIo = io(ENDPOINT, {
+      transports: ["websocket"], // Ensure WebSocket is used
+      withCredentials: true, // Include credentials if needed
+    });
+
+    // Set socket
+    setSocket(socketIo);
+
+    // Cleanup on component unmount
+    return () => {
+      if (socketIo) {
+        socketIo.disconnect();
+      }
+    };
+  }, [ENDPOINT]);
 
   return (
     <SocketContext.Provider value={{ socket }}>
