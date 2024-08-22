@@ -7,6 +7,7 @@ const app = express();
 require("./models/auction");
 dotenv.config();
 const { MONGO_URL } = process.env;
+console.log(MONGO_URL);
 const PORT = 8000;
 
 mongoose.connect(MONGO_URL);
@@ -25,7 +26,7 @@ const server = app.listen(PORT, "::1", () => {
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://ipl-auction-app1.vercel.app/"],
+    origin: ["https://ipl-auction-app1-getv.vercel.app"],
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -35,7 +36,10 @@ app.use(require("./routes/auction"));
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ["http://localhost:3000", "https://ipl-auction-app1.vercel.app/"],
+    origin: [
+      "http://localhost:3000",
+      "https://ipl-auction-app1-getv.vercel.app",
+    ],
   },
 });
 let teams = [];
