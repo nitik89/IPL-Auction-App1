@@ -1,0 +1,367 @@
+[
+  {
+    "name": "Virat Kohli",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/2.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Sameer Rizvi",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1229.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Manish Pandey",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/16.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Rilee Rossouw",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1426.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Abdul Samad",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/525.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Shikhar Dhawan",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/11.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Phil Salt",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1220.png",
+    "role": "Wicketkeeper"
+  },
+  {
+    "name": "Sanju Samson",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/190.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Nitish Rana",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/148.png",
+    "role": "Batter"
+  },
+  {
+    "name": "MS Dhoni",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/57.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Vishnu Vinod",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/581.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Dewald Brevis",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/797.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Faf du Plessis",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/94.png",
+    "role": "Batter"
+  },
+  {
+    "name": "David Warner",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/214.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Wriddhiman Saha",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/225.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Dhruv Jurel",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1004.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Prithvi Shaw",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/51.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Prabhsimran Singh",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/137.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Liam Livingstone",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/183.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Saurav Chuahan",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/3114.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Rinku Singh",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/152.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Kane Williamson",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/65.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Ishan Kishan",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/164.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Riyan Parag",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/189.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Avanish Rao Aravelly",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/2794.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Anuj Rawat",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/534.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Will Jacks",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1941.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Yashasvi Jaiswal",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/533.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Suryakumar Yadav",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/174.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Rahmanullah Gurbaz",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/641.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Heinrich Klaasen",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/202.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Kunal Rathore",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1540.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Shaik Rasheed",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/778.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Donovan Ferreira",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/2033.png",
+    "role": "Wicketkeeper"
+  },
+  {
+    "name": "Jitesh Sharma",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1000.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Glenn Phillips",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/635.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Rajat Patidar",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/597.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Rohit Sharma",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/6.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Dinesh Karthik",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/13.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Shashank Singh",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/191.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Aiden Markram",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/287.png",
+    "role": "Batter"
+  },
+  {
+    "name": "K.S Bharat",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/365.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Shubman Gill",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/62.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Rishabh Pant",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/18.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Jos Buttler",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/182.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Jonny Bairstow",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/216.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Devon Conway",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2023/601.png",
+    "role": "Batter"
+  },
+  {
+    "name": "KL Rahul",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/19.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "BR Sharath",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/3117.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Tim David",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/636.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Harvik Desai",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/3154.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Matthew Wade",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/549.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Devdutt Padikkal",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/200.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Shai Hope",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/268.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Abishek Porel",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1580.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Suyash S Prabhudessai",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/598.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Yash Dhull",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/777.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Ruturaj Gaikwad",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/102.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Swastik Chhikara",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/3102.png",
+    "role": "Batter"
+  },
+  {
+    "name": "N. Tilak Varma",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/993.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Mayank Agarwal",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/55.png",
+    "role": "Batter"
+  },
+  {
+    "name": "David Miller",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/128.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Nicholas Pooran",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/136.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Upendra Singh Yadav",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1472.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Rahul Tripathi",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/188.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Harpreet Bhatia",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1934.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Anmolpreet Singh",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/159.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Quinton de Kock",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/170.png",
+    "role": "Wicketkeeper Batter"
+  },
+  {
+    "name": "Jake Fraser-McGurk",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/3115.png",
+    "role": "Bowler"
+  },
+  {
+    "name": "Sherfane Rutherford",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/122.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Ashton Turner",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/86.png",
+    "role": "Batting Allrounder"
+  },
+  {
+    "name": "Ajinkya Rahane",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/44.png",
+    "role": "Batter"
+  },
+  {
+    "name": "Shimron Hetmyer",
+    "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/210.png",
+    "role": "Batter"
+  }
+]
