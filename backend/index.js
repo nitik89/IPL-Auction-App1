@@ -81,7 +81,7 @@ io.on("connection", (socket) => {
       teams,
     });
     try {
-      await axios.put(`http://localhost:8000/player-sold?id=${roomId}`, {
+      await axios.put(`/player-sold?id=${roomId}`, {
         sold: true,
         teamName: keys[0],
         playerDetail: finalPlayerData,
@@ -170,7 +170,7 @@ io.on("connection", (socket) => {
           clearInterval(withdrawBidInterval);
           const roomId = socket.roomId;
           try {
-            await axios.put(`http://localhost:8000/player-sold?id=${roomId}`, {
+            await axios.put(`/player-sold?id=${roomId}`, {
               sold: false,
               playerDetail: currPlayer,
             });
@@ -196,7 +196,7 @@ io.on("connection", (socket) => {
   socket.on("unsold-player", async ({ currPlayer, currIdx }) => {
     const roomId = socket.roomId;
     try {
-      await axios.put(`http://localhost:8000/player-sold?id=${roomId}`, {
+      await axios.put(`/player-sold?id=${roomId}`, {
         sold: false,
         playerDetail: currPlayer,
       });
