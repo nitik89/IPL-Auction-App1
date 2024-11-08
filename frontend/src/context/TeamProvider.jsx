@@ -6,6 +6,7 @@ export const useTeamContext = () => useContext(TeamContext);
 
 export const TeamProvider = ({ children }) => {
   const [teams, setTeams] = useState([]);
+  const [team, setTeam] = useState({});
   const [startAuction, setStartAuction] = useState(false);
   const [currPlayer, setCurrPlayer] = useState(players[0]);
   const [currIdx, setCurrIdx] = useState(0);
@@ -33,6 +34,8 @@ export const TeamProvider = ({ children }) => {
         setCurrHighest,
         playerSold,
         setPlayerSold,
+        team,
+        setTeam,
       }}
     >
       {children}

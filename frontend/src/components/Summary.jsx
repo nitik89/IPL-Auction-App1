@@ -34,7 +34,7 @@ const Summary = ({ isOpen, handleClose }) => {
   const getSoldPlayers = async () => {
     try {
       const res = await axios.get(
-        `https://ipl-auction-app1.vercel.app/sold-players?id=${userDetails.roomId}`
+        `http://localhost:8000/sold-players?id=${userDetails.roomId}`
       );
       const { soldPlayers } = res.data;
       setSoldPlayers(soldPlayers);
@@ -74,7 +74,7 @@ const Summary = ({ isOpen, handleClose }) => {
                       <Divider />
                       <Text>{currPlayer.role}</Text>
                       <Text color="blue.600" fontSize="2xl">
-                        {currPlayer.price / 10000000} CR
+                        {currPlayer.final_price / 10000000} CR
                       </Text>
                     </Stack>
                   </CardBody>

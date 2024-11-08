@@ -13,6 +13,7 @@ import { useTeamContext } from "../context/TeamProvider";
 
 const PlayerCard = () => {
   const { currPlayer, bidderImage, currHighest } = useTeamContext();
+  console.log(currPlayer);
 
   console.log("current player --", currPlayer);
   return (

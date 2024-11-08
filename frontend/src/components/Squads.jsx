@@ -25,7 +25,7 @@ const Squads = ({ isOpen, handleClose }) => {
   const getSquads = async () => {
     try {
       const res = await axios.get(
-        `https://ipl-auction-app1.vercel.app/get-squad?id=${userDetails.roomId}`
+        `http://localhost:8000/get-squad?id=${userDetails.roomId}`
       );
       const { roomDetails } = res.data;
       console.log("room deta--", roomDetails);
@@ -57,22 +57,7 @@ const Squads = ({ isOpen, handleClose }) => {
                   {team.name} Purse - {team.purse / 10000000} CR
                 </MenuButton>
                 <MenuList>
-                  {team["All-Rounder"]?.map((player) => (
-                    <MenuItem key={player.id}>
-                      {player.name} ({player.role})
-                    </MenuItem>
-                  ))}
-                  {team["Batter"]?.map((player) => (
-                    <MenuItem key={player.id}>
-                      {player.name} ({player.role})
-                    </MenuItem>
-                  ))}
-                  {team["Bowler"]?.map((player) => (
-                    <MenuItem key={player.id}>
-                      {player.name} ({player.role})
-                    </MenuItem>
-                  ))}
-                  {team["WK Keeper - Batter"]?.map((player) => (
+                  {team.players?.map((player) => (
                     <MenuItem key={player.id}>
                       {player.name} ({player.role})
                     </MenuItem>

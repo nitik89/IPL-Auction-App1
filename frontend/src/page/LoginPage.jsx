@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUserContext } from "../context/UserProvider";
 import { useSocketContext } from "../context/SocketProvider";
+import { useTeamContext } from "../context/TeamProvider";
 import teams from "./teams.json";
 
 const LoginPage = () => {
@@ -19,6 +20,7 @@ const LoginPage = () => {
   const [roomId, setRoomId] = useState("");
   const { setUserDetails } = useUserContext();
   const { socket } = useSocketContext();
+  const { setTeam } = useTeamContext();
   const history = useNavigate();
 
   const handleTeamNameChange = (event) => {
@@ -28,9 +30,7 @@ const LoginPage = () => {
 
   const createRoom = async () => {
     try {
-      const res = await axios.post(
-        "https://ipl-auction-app1.vercel.app/create-room"
-      );
+      const res = await axios.get("http://localhost:8000/create-room");
       const { auctionRoom } = res.data;
       setRoomId(auctionRoom._id);
     } catch (err) {
@@ -46,17 +46,10 @@ const LoginPage = () => {
     event.preventDefault();
 
     try {
-      const myObj = teams.filter((team) => team.name == teamName);
+      const myObj = teams.filter((team) => team.name === teamName);
       console.log("my", myObj);
       setUserDetails({ ...myObj[0], roomId });
-      socket.emit("joinRoom", {
-        name: teamName,
-        logo: myObj[0].logo,
-        purse: myObj[0].purse,
-        roomId,
-      });
-
-      history("/dashboard");
+      history("/retention-page");
     } catch (err) {
       console.error(err);
     }

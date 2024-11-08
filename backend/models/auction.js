@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const playerSchema = require("./player");
 const auctionSchema = new mongoose.Schema(
   {
     teams: {
@@ -6,11 +7,11 @@ const auctionSchema = new mongoose.Schema(
       required: true,
     },
     unsold: {
-      type: Array,
+      type: [playerSchema],
       required: true,
     },
     playersSold: {
-      type: Array,
+      type: [playerSchema],
       required: true,
     },
   },

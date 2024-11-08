@@ -2,32 +2,38 @@
   {
     "name": "Virat Kohli",
     "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/2.png",
-    "role": "Batter"
+    "role": "Batter",
+    "price": 20000000
   },
   {
     "name": "Sameer Rizvi",
     "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1229.png",
-    "role": "Batter"
+    "role": "Batter",
+    "price": 20000000
   },
   {
     "name": "Manish Pandey",
     "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/16.png",
-    "role": "Batter"
+    "role": "Batter",
+    "price": 20000000
   },
   {
     "name": "Rilee Rossouw",
     "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/1426.png",
-    "role": "Batter"
+    "role": "Batter",
+    "price": 20000000
   },
   {
     "name": "Abdul Samad",
     "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/525.png",
-    "role": "Batter"
+    "role": "Batter",
+    "price": 20000000
   },
   {
     "name": "Shikhar Dhawan",
     "image": "https://documents.iplt20.com/ipl/IPLHeadshot2024/11.png",
-    "role": "Batter"
+    "role": "Batter",
+    "price": 20000000
   },
   {
     "name": "Phil Salt",

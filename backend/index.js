@@ -5,9 +5,10 @@ const axios = require("axios");
 const mongoose = require("mongoose");
 const app = express();
 require("./models/auction");
+require("./models/player");
+require("./models/teams");
 dotenv.config();
 const { MONGO_URL } = process.env;
-console.log(MONGO_URL);
 const PORT = process.env.PORT || 8000;
 
 mongoose.connect(MONGO_URL);
@@ -24,14 +25,7 @@ const server = app.listen(PORT, "::1", () => {
 });
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: "*", // Allow all origins
-    methods: ["GET", "POST"], // Allowed methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-    credentials: true, // Allow cookies and other credentials
-  })
-);
+app.use(cors());
 app.use(require("./routes/auction"));
 
 const io = require("socket.io")(server, {
