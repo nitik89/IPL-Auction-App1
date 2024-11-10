@@ -87,30 +87,29 @@ router.get("/players-myteam", async (req, res) => {
 router.put("/player-sold", async (req, res) => {
   try {
     const { id } = req.query;
-    console.log(id);
     const { teamName, playerDetail, sold } = req.body;
-    const { role, price } = playerDetail;
-    console.log(id, playerDetail);
-    const auctionRoom = await Auction.findOne({ _id: id });
-    const { teams } = auctionRoom;
+    const { final_price } = playerDetail;
+    console.log(playerDetail);
     if (sold) {
-      const updatedTeam = teams.map((team) => {
-        if (team.name == teamName) {
-          console.log("yes", teamName);
-          team[role].push(playerDetail);
-          team.purse -= parseInt(price);
-        }
-        return team;
-      });
-      auctionRoom.playersSold.push(playerDetail);
-      auctionRoom.teamName = updatedTeam;
+      await Auction.findOneAndUpdate(
+        { _id: id, "teams.name": teamName },
+        {
+          $push: { playersSold: playerDetail, "teams.$.players": playerDetail },
+          $inc: { "teams.$.purse": -final_price },
+        },
+        { new: true }
+      );
+      res.status(200).json({ message: "Player Saved" });
     } else {
-      auctionRoom.unsold.push(playerDetail);
+      await Auction.findOneAndUpdate(
+        { _id: id },
+        {
+          $push: { unsold: playerDetail },
+        },
+        { new: true }
+      );
+      res.status(200).json({ message: "Player Saved" });
     }
-    await Auction.findByIdAndUpdate(id, auctionRoom, {
-      new: true,
-    });
-    res.status(200).json({ message: "Player Saved" });
   } catch (err) {
     console.log(err);
     res.status(422).json({ message: "Error spotted", err });
@@ -157,7 +156,26 @@ router.get("/get-team", async (req, res) => {
   }
 });
 
-router.get("/get-auction-players", async (req, res) => {});
+router.get("/get-auction-players", async (req, res) => {
+  try {
+    const { id } = req.query;
+    const auctionRoom = await Auction.findOne({ _id: id });
+    console.log(auctionRoom);
+    const soldPlayers = auctionRoom.playersSold;
+    const unSoldPlayers = auctionRoom.unsold;
+    const playersNotBeShown = [...unSoldPlayers, ...soldPlayers].map(
+      (player) => player._id
+    );
+    const players = await Player.find({ _id: { $nin: playersNotBeShown } });
+
+    res.status(200).json({ message: "Auction Players", players });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(200)
+      .json({ err: "error is there in fetching the auction room" });
+  }
+});
 
 router.post("/retain-player", async (req, res) => {
   const { retainedPlayers, teamName, amount, auctionId } = req.body;

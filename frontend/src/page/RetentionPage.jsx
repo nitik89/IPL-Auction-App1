@@ -18,10 +18,10 @@ import DialogAction from "../components/DialogAction";
 import RetainPlayerCard from "../components/RetainPlayerCard";
 
 const CappedRetentionStages = [
-  { name: "First retention", amount: 180000000 },
+  { name: "First retention", amount: 180010000 },
   { name: "Second retention", amount: 140000000 },
   { name: "Third retention", amount: 110000000 },
-  { name: "Fourth retention", amount: 180000000 },
+  { name: "Fourth retention", amount: 180010000 },
   { name: "Fifth retention", amount: 140000000 },
 ];
 
@@ -82,7 +82,7 @@ export const RetentionPage = () => {
   const handlePlayers = async () => {
     try {
       const playersData = await axios.get(
-        `http://localhost:8000/all-team-players?teamName=${userDetails?.name}`
+        `http://localhost:8001/all-team-players?teamName=${userDetails?.name}`
       );
 
       setPlayers(playersData?.data?.players);

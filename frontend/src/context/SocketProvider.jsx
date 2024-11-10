@@ -6,7 +6,7 @@ const SocketContext = createContext();
 export const useSocketContext = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }) => {
-  const ENDPOINT = "http://localhost:8000";
+  const ENDPOINT = "http://localhost:8001";
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     // Initialize socket connection

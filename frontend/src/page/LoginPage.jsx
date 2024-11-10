@@ -7,22 +7,23 @@ import {
   Input,
   Select,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUserContext } from "../context/UserProvider";
 import { useSocketContext } from "../context/SocketProvider";
 import { useTeamContext } from "../context/TeamProvider";
-import teams from "./teams.json";
 
+//fix this page
 const LoginPage = () => {
-  const [teamName, setTeamName] = useState("");
+  const [teamsArr, setTeamsArr] = useState([]);
+  const [teamName, setTeamName] = useState({});
   const [roomId, setRoomId] = useState("");
   const { setUserDetails } = useUserContext();
   const { socket } = useSocketContext();
   const { setTeam } = useTeamContext();
   const history = useNavigate();
-
+  console.log(teamName);
   const handleTeamNameChange = (event) => {
     console.log("team array", event.target.value);
     setTeamName(event.target.value);
@@ -30,7 +31,7 @@ const LoginPage = () => {
 
   const createRoom = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/create-room");
+      const res = await axios.get("http://localhost:8001/create-room");
       const { auctionRoom } = res.data;
       setRoomId(auctionRoom._id);
     } catch (err) {
@@ -44,17 +45,30 @@ const LoginPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(teamName);
 
     try {
-      const myObj = teams.filter((team) => team.name === teamName);
+      const myObj = teamsArr?.find((team) => team._id === teamName);
       console.log("my", myObj);
-      setUserDetails({ ...myObj[0], roomId });
+      setUserDetails({ ...myObj, roomId });
       history("/retention-page");
     } catch (err) {
       console.error(err);
     }
   };
-
+  const getTeams = async () => {
+    try {
+      const teams = await axios.get("http://localhost:8001/get-team");
+      console.log("teams", teams);
+      setTeamsArr(teams?.data?.teams);
+      setTeamName(teamsArr[0]?._id);
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+  useEffect(() => {
+    getTeams();
+  }, []);
   return (
     <div>
       <Flex
@@ -68,10 +82,10 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit}>
             <FormControl>
               <FormLabel>Select Your Team Name:</FormLabel>
-              <Select value={teamName?.name} onChange={handleTeamNameChange}>
-                {teams.map((team) => {
+              <Select value={teamName} onChange={handleTeamNameChange}>
+                {teamsArr.map((team) => {
                   return (
-                    <option key={team.id} value={team.name}>
+                    <option key={team._id} value={team._id}>
                       {team.name}
                     </option>
                   );

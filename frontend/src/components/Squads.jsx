@@ -21,11 +21,12 @@ import axios from "axios";
 const Squads = ({ isOpen, handleClose }) => {
   const { userDetails } = useUserContext();
   const [squads, setSquads] = useState([]);
+  console.log(squads);
 
   const getSquads = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/get-squad?id=${userDetails.roomId}`
+        `http://localhost:8001/get-squad?id=${userDetails.roomId}`
       );
       const { roomDetails } = res.data;
       console.log("room deta--", roomDetails);

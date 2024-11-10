@@ -9,7 +9,7 @@ require("./models/player");
 require("./models/teams");
 dotenv.config();
 const { MONGO_URL } = process.env;
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 
 mongoose.connect(MONGO_URL);
 
@@ -43,8 +43,6 @@ let withdrawBidInterval;
 let withdrawBidTimeLeft = 0;
 let index = 0;
 io.on("connection", (socket) => {
-  console.log("connected to socket.io");
-
   const decreasePurse = (teamName, amount) => {
     const team = teams.find((team) => team.name === teamName);
     if (team) {
@@ -63,7 +61,6 @@ io.on("connection", (socket) => {
     team
   ) => {
     clearInterval(withdrawBidInterval);
-    console.log("player is sold to this team");
     decreasePurse(keys[0], bids[keys[0]]);
     const finalPlayerData = { ...currPlayer, team: keys[0] };
     players.push(finalPlayerData);
@@ -76,7 +73,7 @@ io.on("connection", (socket) => {
       teams,
     });
     try {
-      await axios.put(`/player-sold?id=${roomId}`, {
+      await axios.put(`http://localhost:8001/player-sold?id=${roomId}`, {
         sold: true,
         teamName: keys[0],
         playerDetail: finalPlayerData,
@@ -89,7 +86,6 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     socket.teamName = name;
     socket.roomId = roomId;
-    console.log(name);
     teams.push({ name, logo, purse });
 
     io.to(roomId).emit("joined-room", {
@@ -119,7 +115,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("bid-player", ({ price, team, bids, logo, currPlayer }) => {
+  socket.on("bid-player", ({ final_price, team, bids, logo, currPlayer }) => {
     if (teams.length == 2) {
       clearInterval(withdrawBidInterval);
       const keys = Object.keys(bids);
@@ -127,12 +123,8 @@ io.on("connection", (socket) => {
       const findPlayer = players.find(
         (player) => player.name == currPlayer.name
       );
-
-      console.log("singlebid", keys);
-
       if (keys.length == 1 && !findPlayer) {
         withdrawBidTimeLeft = 10;
-        console.log("condition enetered");
         withdrawBidInterval = setInterval(async () => {
           withdrawBidTimeLeft--;
           if (withdrawBidTimeLeft == 0) {
@@ -142,7 +134,6 @@ io.on("connection", (socket) => {
             });
             handleDecrease(keys, bids, currPlayer, index, roomId, team);
           } else {
-            console.log("timer", withdrawBidTimeLeft);
             io.emit("timer-update", {
               timerTitle: `Player will be sold to ${keys[0]} In`,
               timeLeft: withdrawBidTimeLeft,
@@ -151,11 +142,10 @@ io.on("connection", (socket) => {
         }, 1000);
       }
 
-      io.emit("team-bid", { price, team, bids, logo });
+      io.emit("team-bid", { final_price, team, bids, logo });
     }
   });
   socket.on("check-unsold", ({ currPlayer, currIdx }) => {
-    console.log("my curr player ---", currPlayer, currIdx);
     clearInterval(withdrawBidInterval);
     if (teams.length == 2) {
       withdrawBidTimeLeft = 10;
@@ -165,7 +155,7 @@ io.on("connection", (socket) => {
           clearInterval(withdrawBidInterval);
           const roomId = socket.roomId;
           try {
-            await axios.put(`/player-sold?id=${roomId}`, {
+            await axios.put(`http://localhost:8001/player-sold?id=${roomId}`, {
               sold: false,
               playerDetail: currPlayer,
             });
@@ -179,7 +169,6 @@ io.on("connection", (socket) => {
           index++;
           io.emit("player-unsold", { currPlayer, currIdx: index });
         } else {
-          console.log("timer", withdrawBidTimeLeft);
           io.emit("timer-update", {
             timerTitle: `No bids seen`,
             timeLeft: withdrawBidTimeLeft,
@@ -191,7 +180,7 @@ io.on("connection", (socket) => {
   socket.on("unsold-player", async ({ currPlayer, currIdx }) => {
     const roomId = socket.roomId;
     try {
-      await axios.put(`/player-sold?id=${roomId}`, {
+      await axios.put(`http://localhost:8001/player-sold?id=${roomId}`, {
         sold: false,
         playerDetail: currPlayer,
       });
@@ -205,14 +194,12 @@ io.on("connection", (socket) => {
     if (teams.length == 2) {
       const keys = Object.keys(bids);
       const roomId = socket.roomId;
-      console.log("rrom", roomId, keys);
       const findPlayer = players.find(
         (player) => player.name == currPlayer.name
       );
       clearInterval(withdrawBidInterval);
       withdrawBidTimeLeft = 10;
       if (keys.length == 1 && !findPlayer) {
-        console.log("condition enetered");
         withdrawBidInterval = setInterval(async () => {
           withdrawBidTimeLeft--;
           if (withdrawBidTimeLeft == 0) {
@@ -222,7 +209,6 @@ io.on("connection", (socket) => {
             });
             handleDecrease(keys, bids, currPlayer, index, roomId, team);
           } else {
-            console.log("timer", withdrawBidTimeLeft);
             io.emit("timer-update", {
               timerTitle: `Player will be sold to ${keys[0]} In`,
               timeLeft: withdrawBidTimeLeft,
@@ -247,7 +233,6 @@ io.on("connection", (socket) => {
           timeLeft: 0,
         });
       } else {
-        console.log("my timerrr --", timerToLoadNext);
         io.emit("timer-update", {
           timerTitle: `Loading the Next Player In`,
           timeLeft: timerToLoadNext,
@@ -258,7 +243,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     if (socket.teamName) {
       teams = teams.filter((team) => team.name !== socket.teamName);
-      console.log(teams);
       io.emit("team-left", {
         teams,
         message: `${socket.teamName} has left the room`,

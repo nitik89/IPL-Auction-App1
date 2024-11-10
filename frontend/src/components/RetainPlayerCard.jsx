@@ -58,7 +58,9 @@ const RetainPlayerCard = ({
         )}
         {dialogPage && (
           <Stack spacing={2}>
-            <Text fontSize="2xl">{myPlayer.final_price / 10000000} CR</Text>
+            <Text fontSize="2xl">
+              {Math.floor(myPlayer.final_price / 10000000)} CR
+            </Text>
           </Stack>
         )}
       </CardBody>

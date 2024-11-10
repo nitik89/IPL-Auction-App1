@@ -30,7 +30,7 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
       amount += player.final_price;
     });
     try {
-      await axios.post("http://localhost:8000/retain-player", {
+      await axios.post("http://localhost:8001/retain-player", {
         teamName: name,
         amount: purse - amount,
         auctionId: roomId,

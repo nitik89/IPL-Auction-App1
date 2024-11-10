@@ -40,15 +40,16 @@ const TeamsSection = () => {
 
     const newBids = { ...bids };
     if (Object.keys(bids).length === 0) {
-      newBids[currTeam] = currPlayer.price;
+      newBids[currTeam] = currPlayer.base_price;
     } else {
-      newBids[currTeam] = currPlayer.price + 2500000;
+      newBids[currTeam] = currPlayer.final_price + 2500000;
     }
+    console.log("currPlayer", currPlayer);
     setBids(newBids);
 
     socket.emit("bid-player", {
       team: currTeam,
-      price: newBids[currTeam],
+      final_price: newBids[currTeam],
       bids: newBids,
       logo: userDetails.logo,
       currIdx: currIdx,
@@ -56,7 +57,7 @@ const TeamsSection = () => {
     });
   };
   const withDraw = (currTeam) => {
-    console.log("the bids -- ", bids, currTeam);
+    console.log("the bids -- ", bids, currTeam, currPlayer);
     const tempBid = { ...bids };
     delete tempBid[currTeam];
     setBids(tempBid);
@@ -147,7 +148,12 @@ const TeamsSection = () => {
                           variant="solid"
                           mx={2}
                           isDisabled={
-                            myBid || team.purse < currPlayer.price + 2500000
+                            myBid ||
+                            team.purse <
+                              Math.max(
+                                currPlayer.final_price + 2500000,
+                                currPlayer.base_price
+                              )
                           }
                           onClick={() => {
                             increaseBids(team.name);
@@ -160,7 +166,11 @@ const TeamsSection = () => {
                           variant="solid"
                           isDisabled={
                             myWithdraw ||
-                            team.purse < currPlayer.price + 2500000
+                            team.purse <
+                              Math.max(
+                                currPlayer.final_price + 2500000,
+                                currPlayer.base_price
+                              )
                           }
                           mx={2}
                           onClick={() => withDraw(team.name)}

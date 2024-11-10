@@ -13,7 +13,6 @@ import { useTeamContext } from "../context/TeamProvider";
 
 const PlayerCard = () => {
   const { currPlayer, bidderImage, currHighest } = useTeamContext();
-  console.log(currPlayer);
 
   console.log("current player --", currPlayer);
   return (
@@ -21,7 +20,7 @@ const PlayerCard = () => {
       <CardBody>
         <Center>
           <Image
-            src={currPlayer.image}
+            src={currPlayer?.image}
             alt="Player Card"
             borderRadius="lg"
             height="200"
@@ -33,13 +32,15 @@ const PlayerCard = () => {
         </Center>
 
         <Stack mt="6" spacing="3" textAlign="center">
-          <Heading size="md">{currPlayer.name}</Heading>
+          <Heading size="md">{currPlayer?.name}</Heading>
 
           <Divider />
-          <Text>{currPlayer.role}</Text>
+          <Text>{currPlayer?.role}</Text>
           <Divider />
           <Text color="blue.600" fontSize="2xl">
-            {currPlayer.price / 10000000} CR
+            {Math.max(currPlayer?.base_price, currPlayer?.final_price) /
+              10000000}{" "}
+            CR
           </Text>
         </Stack>
       </CardBody>

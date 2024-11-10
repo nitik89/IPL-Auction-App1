@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
-import players from "../players.json";
+import React, { createContext, useContext, useEffect, useState } from "react";
 const TeamContext = createContext();
 
 export const useTeamContext = () => useContext(TeamContext);
@@ -8,7 +7,8 @@ export const TeamProvider = ({ children }) => {
   const [teams, setTeams] = useState([]);
   const [team, setTeam] = useState({});
   const [startAuction, setStartAuction] = useState(false);
-  const [currPlayer, setCurrPlayer] = useState(players[0]);
+  const [currPlayer, setCurrPlayer] = useState({});
+  const [playersList, setPlayerList] = useState([]);
   const [currIdx, setCurrIdx] = useState(0);
   const [bids, setBids] = useState({});
   const [bidderImage, setBidderImage] = useState("");
@@ -36,6 +36,8 @@ export const TeamProvider = ({ children }) => {
         setPlayerSold,
         team,
         setTeam,
+        setPlayerList,
+        playersList,
       }}
     >
       {children}

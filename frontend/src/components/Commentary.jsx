@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Stat, StatLabel, StatNumber } from "@chakra-ui/react";
 import { useSocketContext } from "../context/SocketProvider";
 import { useTeamContext } from "../context/TeamProvider";
-import players from "../players.json";
 import { Button, Container, Grid, useToast } from "@chakra-ui/react";
 import Squads from "./Squads";
 import Summary from "./Summary";
 import { useUserContext } from "../context/UserProvider";
+import axios from "axios";
 
 const Commentary = () => {
   const [message, setMessage] = useState("");
@@ -15,6 +15,7 @@ const Commentary = () => {
   const [time, setTime] = useState(0);
   const { socket } = useSocketContext();
   const [isOpen, setIsOpen] = useState(false);
+  const [currPlayers, setCurrPlayers] = useState([]);
   const handleClose = () => setIsOpen(false);
   const handleCloseSummary = () => setSummaryOpen(false);
   const toast = useToast();
@@ -29,9 +30,13 @@ const Commentary = () => {
     setBidderImage,
     setCurrHighest,
     setPlayerSold,
+    setPlayerList,
+    playersList,
+    currIdx,
   } = useTeamContext();
 
   const { userDetails } = useUserContext();
+  console.log("currPlayer", currPlayer, playersList);
 
   const handleCopy = async () => {
     try {
@@ -62,8 +67,8 @@ const Commentary = () => {
       setTeams(data.teams);
     };
 
-    const handleTeamBid = ({ price, team, bids, logo }) => {
-      const updatedPlayer = { ...currPlayer, price: price };
+    const handleTeamBid = ({ final_price, team, bids, logo }) => {
+      const updatedPlayer = { ...currPlayer, final_price };
       setCurrPlayer(updatedPlayer);
       setBids(bids);
       setBidderImage(logo);
@@ -71,13 +76,13 @@ const Commentary = () => {
     };
     const handleLoadNextPlayer = ({ currIdx, timerTitle }) => {
       setCurrIdx(currIdx);
-      setCurrPlayer(players[currIdx]);
+      setCurrPlayer(playersList[currIdx]);
       setBidderImage("");
       setCurrHighest("");
       setTitle(timerTitle);
       setPlayerSold(false);
       setBids({});
-      socket.emit("check-unsold", { currPlayer: players[currIdx], currIdx });
+      socket.emit("check-unsold", { currPlayer, currIdx });
     };
 
     const handlePlayerUnsold = ({ currPlayer: oldPlayer, currIdx }) => {
@@ -96,11 +101,10 @@ const Commentary = () => {
         setMessage(`${oldPlayer?.name} is sold to ${keys[0]}`);
         setTeams(teams);
         setPlayerSold(true);
-        socket.emit("load-next", { currIdx, currPlayer: players[currIdx] });
+        socket.emit("load-next", { currIdx, currPlayer: playersList[currIdx] });
       }
     };
     const handleWithdrawnBid = ({ team, bids }) => {
-      const keys = Object.keys(bids);
       setMessage(`${team.name} is out`);
       setBids(bids);
     };
@@ -114,7 +118,7 @@ const Commentary = () => {
     const handleAuctionStart = ({ startTheAuction, currIdx }) => {
       setStartAuction(startTheAuction);
       setCurrIdx(currIdx);
-      setCurrPlayer(players[currIdx]);
+      setCurrPlayer(playersList[currIdx]);
       socket.emit("check-unsold", { currIdx, currPlayer });
     };
     const handleDisconnected = ({ teams, message, startAuction }) => {
@@ -158,6 +162,33 @@ const Commentary = () => {
       });
     }
   }, [message, toast]);
+
+  const fetchPlayers = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8001/get-auction-players?id=${userDetails?.roomId}`
+      );
+      console.log("Fetched players:", response?.data?.players);
+
+      // Update playersList with fetched data
+      setPlayerList(response?.data?.players);
+
+      // Set currPlayer immediately based on response
+      if (response?.data?.players.length > 0) {
+        setCurrPlayer(response?.data?.players[currIdx]);
+        socket.emit("load-player", {
+          currIdx: 0,
+          currPlayer: response?.data?.players[currIdx],
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching players: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlayers();
+  }, [userDetails]);
 
   return (
     <Container centerContent>
