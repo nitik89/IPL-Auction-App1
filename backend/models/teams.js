@@ -5,6 +5,8 @@ const teamsSchema = new mongoose.Schema(
     image: String,
     purse: Number,
     players: Array,
+    cappedRTM: Number,
+    uncappedRTM: Number,
   },
   { timestamps: true }
 );

@@ -55,7 +55,7 @@ const Squads = ({ isOpen, handleClose }) => {
                   rightIcon={<ChevronDownIcon />}
                   key={team.name}
                 >
-                  {team.name} Purse - {team.purse / 10000000} CR
+                  {team.name} Purse - {Math.floor(team.purse / 10000000)} CR
                 </MenuButton>
                 <MenuList>
                   {team.players?.map((player) => (

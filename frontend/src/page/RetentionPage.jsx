@@ -18,10 +18,10 @@ import DialogAction from "../components/DialogAction";
 import RetainPlayerCard from "../components/RetainPlayerCard";
 
 const CappedRetentionStages = [
-  { name: "First retention", amount: 180010000 },
+  { name: "First retention", amount: 180000000 },
   { name: "Second retention", amount: 140000000 },
   { name: "Third retention", amount: 110000000 },
-  { name: "Fourth retention", amount: 180010000 },
+  { name: "Fourth retention", amount: 180000000 },
   { name: "Fifth retention", amount: 140000000 },
 ];
 
@@ -33,11 +33,12 @@ export const RetentionPage = () => {
   const [retainedPlayers, setRetainedPlayers] = useState([]);
   const [uncappedRetention, setUncappedRetention] = useState([]);
   console.log(retainedPlayers, uncappedRetention);
+  const UNCAPPED_PLAYER_PRICE = 40000000;
 
   const handlePlayerRetention = (player) => {
     if (player.is_uncapped) {
       if (uncappedRetention.length < 2) {
-        player.final_price = 40000000;
+        player.final_price = UNCAPPED_PLAYER_PRICE;
         setUncappedRetention([...uncappedRetention, player]);
       } else {
         console.log("cannot retain this player");

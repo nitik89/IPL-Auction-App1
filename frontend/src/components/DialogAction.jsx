@@ -24,6 +24,10 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
   const handlePlayerRetain = async () => {
     const finalRetentionList = [...uncappedPlayers, ...cappedPlayers];
     let amount = 0;
+    let uncappedPlayersCount = uncappedPlayers.length;
+    let cappedPlayersCount = cappedPlayers.length;
+    console.log("players", uncappedPlayersCount, cappedPlayersCount);
+
     finalRetentionList.forEach((player) => {
       player.is_retained = true;
       player.is_sold = true;
@@ -35,6 +39,8 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
         amount: purse - amount,
         auctionId: roomId,
         retainedPlayers: finalRetentionList,
+        uncappedPlayersCount,
+        cappedPlayersCount,
       });
       socket.emit("joinRoom", {
         name,

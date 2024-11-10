@@ -178,8 +178,26 @@ router.get("/get-auction-players", async (req, res) => {
 });
 
 router.post("/retain-player", async (req, res) => {
-  const { retainedPlayers, teamName, amount, auctionId } = req.body;
-  console.log(auctionId, teamName, retainedPlayers);
+  const {
+    retainedPlayers,
+    teamName,
+    amount,
+    auctionId,
+    uncappedPlayersCount,
+    cappedPlayersCount,
+  } = req.body;
+  console.log(uncappedPlayersCount, cappedPlayersCount);
+  let unCappedRTMS = 5,
+    CappedRTMS = 2;
+  if (uncappedPlayersCount + cappedPlayersCount < 6) {
+    unCappedRTMS = uncappedPlayersCount;
+    CappedRTMS = cappedPlayersCount;
+    if (unCappedRTMS == 2) {
+      CappedRTMS++;
+    }
+  }
+
+  console.log(unCappedRTMS, CappedRTMS);
   try {
     const auction = await Auction.findOneAndUpdate(
       { _id: auctionId, "teams.name": teamName },
@@ -189,6 +207,10 @@ router.post("/retain-player", async (req, res) => {
           playersSold: { $each: retainedPlayers },
         },
         $set: { "teams.$.purse": amount },
+        $inc: {
+          "teams.$.cappedRTM": -CappedRTMS,
+          "teams.$.uncappedRTM": -unCappedRTMS,
+        },
       },
 
       { new: true } // Return the updated document
