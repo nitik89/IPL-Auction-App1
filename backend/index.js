@@ -82,11 +82,12 @@ io.on("connection", (socket) => {
       console.log("err", err);
     }
   };
-  socket.on("joinRoom", ({ name, logo, purse, roomId }) => {
+  socket.on("joinRoom", (team) => {
+    const { roomId, name } = team;
     socket.join(roomId);
     socket.teamName = name;
     socket.roomId = roomId;
-    teams.push({ name, logo, purse });
+    teams.push(team);
 
     io.to(roomId).emit("joined-room", {
       teams,

@@ -89,7 +89,6 @@ router.put("/player-sold", async (req, res) => {
     const { id } = req.query;
     const { teamName, playerDetail, sold } = req.body;
     const { final_price } = playerDetail;
-    console.log(playerDetail);
     if (sold) {
       await Auction.findOneAndUpdate(
         { _id: id, "teams.name": teamName },
@@ -120,7 +119,6 @@ router.get("/create-room", async (req, res) => {
   //   console.log(req.body);
 
   const teams = await Teams.find();
-  console.log(teams);
 
   try {
     const newRoom = new Auction({ teams, unsold: [], playersSold: [] });
@@ -160,7 +158,6 @@ router.get("/get-auction-players", async (req, res) => {
   try {
     const { id } = req.query;
     const auctionRoom = await Auction.findOne({ _id: id });
-    console.log(auctionRoom);
     const soldPlayers = auctionRoom.playersSold;
     const unSoldPlayers = auctionRoom.unsold;
     const playersNotBeShown = [...unSoldPlayers, ...soldPlayers].map(
@@ -215,7 +212,9 @@ router.post("/retain-player", async (req, res) => {
 
       { new: true } // Return the updated document
     );
-    res.status(200).json(auction);
+    const updatedTeam = auction.teams.find((team) => team.name === teamName);
+    console.log(updatedTeam);
+    res.status(200).json(updatedTeam);
   } catch (err) {
     console.log(err);
     res

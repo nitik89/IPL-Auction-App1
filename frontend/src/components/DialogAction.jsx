@@ -18,7 +18,8 @@ import { useNavigate } from "react-router-dom";
 
 const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
   const { userDetails } = useUserContext();
-  const { roomId, purse, name, logo } = userDetails;
+  console.log("userDetails", userDetails);
+  const { roomId, purse, name } = userDetails;
   const { socket } = useSocketContext();
   const history = useNavigate();
   const handlePlayerRetain = async () => {
@@ -34,21 +35,19 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
       amount += player.final_price;
     });
     try {
-      await axios.post("http://localhost:8001/retain-player", {
-        teamName: name,
-        amount: purse - amount,
-        auctionId: roomId,
-        retainedPlayers: finalRetentionList,
-        uncappedPlayersCount,
-        cappedPlayersCount,
-      });
-      socket.emit("joinRoom", {
-        name,
-        logo,
-        purse,
-        roomId,
-      });
-
+      const updatedTeam = await axios.post(
+        "http://localhost:8001/retain-player",
+        {
+          teamName: name,
+          amount: purse - amount,
+          auctionId: roomId,
+          retainedPlayers: finalRetentionList,
+          uncappedPlayersCount,
+          cappedPlayersCount,
+        }
+      );
+      console.log("updated team", updatedTeam);
+      socket.emit("joinRoom", updatedTeam.data);
       history("/dashboard");
     } catch (err) {
       console.log("Error in retaining players", err);

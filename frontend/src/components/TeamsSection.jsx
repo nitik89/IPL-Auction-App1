@@ -12,6 +12,7 @@ import {
   Heading,
   Image,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import { useUserContext } from "../context/UserProvider";
 import { useSocketContext } from "../context/SocketProvider";
@@ -97,7 +98,7 @@ const TeamsSection = () => {
       setMyWithdraw(false);
     }
   }, [bids]);
-
+  console.log(teams);
   return (
     <Grid templateColumns="repeat(4, 1fr)" gap={6} m={6}>
       {teams?.map((team, index) => (
@@ -131,6 +132,7 @@ const TeamsSection = () => {
                 <Heading size="md">{team.name}</Heading>
               </Stack>
             </CardBody>
+
             {userDetails.name == team.name && startAuction && (
               <>
                 {" "}

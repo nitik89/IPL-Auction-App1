@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Grid,
   Menu,
@@ -12,6 +13,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
@@ -55,7 +57,12 @@ const Squads = ({ isOpen, handleClose }) => {
                   rightIcon={<ChevronDownIcon />}
                   key={team.name}
                 >
-                  {team.name} Purse - {Math.floor(team.purse / 10000000)} CR
+                  <Text>
+                    {" "}
+                    {team.name} Purse - {Math.floor(team.purse / 10000000)} CR ;
+                    RTM - Capped: {team.cappedRTM} ; Uncapped:{" "}
+                    {team.uncappedRTM}
+                  </Text>
                 </MenuButton>
                 <MenuList>
                   {team.players?.map((player) => (
