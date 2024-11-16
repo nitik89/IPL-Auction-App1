@@ -97,8 +97,8 @@ io.on("connection", (socket) => {
     const previousTeam = teams.find(
       (team) => team.name === currPlayer.prev_team_name
     );
-    console.log(previousTeam.name, team, STATE);
-    if (previousTeam.name !== team && STATE == "SELLING") {
+
+    if (previousTeam?.name !== team && STATE == "SELLING") {
       console.log("ask for RTM");
       const targetSocketId = clients.get(previousTeam.name);
       console.log("socket", targetSocketId);

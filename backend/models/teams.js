@@ -7,6 +7,8 @@ const teamsSchema = new mongoose.Schema(
     players: Array,
     cappedRTM: Number,
     uncappedRTM: Number,
+    primaryColor: String,
+    secondaryColor: String,
   },
   { timestamps: true }
 );

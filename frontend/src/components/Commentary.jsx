@@ -230,17 +230,20 @@ const Commentary = () => {
   };
 
   const handleNo = () => {
+    setSilderActive("FINAL-SELLING");
+    socket.emit("withraw-bid", {
+      team: currIdx.prev_team_name,
+      bids,
+      currIdx: currIdx,
+      currPlayer,
+      STATE: "FINAL-SELLING",
+    });
     onClose();
   };
   useEffect(() => {
     fetchPlayers();
   }, [userDetails]);
-  console.log(
-    currPlayer?.prev_team_name?.length,
-    prevTeam?.length,
-    currPlayer?.prev_team_name === prevTeam,
-    isOpended
-  );
+
   return (
     <Container centerContent>
       <Grid templateColumns="1fr " width="100%" gap={4} p={4}>
@@ -251,6 +254,7 @@ const Commentary = () => {
             currentPlayer={currPlayer}
             handleYes={handleYes}
             handleNo={handleNo}
+            state={sliderActive}
           />
         )}
         <Button width="100%" onClick={handleCopy}>

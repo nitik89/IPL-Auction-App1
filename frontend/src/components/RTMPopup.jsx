@@ -11,7 +11,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const RTMPopup = ({ isOpened, onClose, message, handleYes, handleNo }) => {
+const RTMPopup = ({
+  isOpened,
+  onClose,
+  handleYes,
+  currentPlayer,
+  handleNo,
+}) => {
   return (
     <>
       <Modal isOpen={isOpened} onClose={onClose} isCentered>
@@ -20,7 +26,10 @@ const RTMPopup = ({ isOpened, onClose, message, handleYes, handleNo }) => {
           <ModalHeader>Confirmation</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>{message}</Text>
+            <Text>
+              Do you want to retain {currentPlayer?.name} at{" "}
+              {currentPlayer?.final_price / 10000000} CR ?
+            </Text>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="green" mr={3} onClick={handleYes}>

@@ -130,6 +130,11 @@ const TeamsSection = () => {
       setSilderActive("FINAL-BID");
     });
   }, [socket]);
+  useEffect(() => {
+    if (sliderActive === "SELLING") {
+      setSliderValue(2500000); // Ensure value is at least 25000 when in "SELLING" mode
+    }
+  }, [sliderActive]);
 
   return (
     <Grid templateColumns="repeat(4, 1fr)" gap={6} m={6}>
@@ -143,6 +148,7 @@ const TeamsSection = () => {
             flexDirection="column"
             justifyContent="space-between"
             backgroundColor={team.name == currHighest && "gray.200"}
+            bgGradient={`linear(to-br, ${team.primaryColor} 50%, ${team.secondaryColor} 50%)`}
           >
             <CardBody
               textAlign="center"
@@ -151,6 +157,7 @@ const TeamsSection = () => {
               flexDirection="column"
               justifyContent="center"
               alignItems="center"
+              color="white"
             >
               <Image
                 src={team.logo}
