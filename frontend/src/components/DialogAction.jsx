@@ -46,8 +46,8 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
           cappedPlayersCount,
         }
       );
-      console.log("updated team", updatedTeam);
-      socket.emit("joinRoom", updatedTeam.data);
+      const updatedTeamData = updatedTeam.data;
+      socket.emit("joinRoom", { ...updatedTeamData, roomId, name, purse });
       history("/dashboard");
     } catch (err) {
       console.log("Error in retaining players", err);

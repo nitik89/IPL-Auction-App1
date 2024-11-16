@@ -14,6 +14,8 @@ export const TeamProvider = ({ children }) => {
   const [bidderImage, setBidderImage] = useState("");
   const [currHighest, setCurrHighest] = useState("");
   const [playerSold, setPlayerSold] = useState(false);
+  const [myWithdraw, setMyWithdraw] = useState(true);
+  const [sliderActive, setSilderActive] = useState("SELLING");
 
   return (
     <TeamContext.Provider
@@ -38,6 +40,10 @@ export const TeamProvider = ({ children }) => {
         setTeam,
         setPlayerList,
         playersList,
+        myWithdraw,
+        setMyWithdraw,
+        sliderActive,
+        setSilderActive,
       }}
     >
       {children}

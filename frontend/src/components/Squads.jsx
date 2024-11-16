@@ -49,7 +49,7 @@ const Squads = ({ isOpen, handleClose }) => {
         <ModalHeader>Squads</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+          <Grid templateColumns="repeat(1, 1fr)" gap={4} width="100%">
             {squads?.map((team) => (
               <Menu>
                 <MenuButton
@@ -66,7 +66,11 @@ const Squads = ({ isOpen, handleClose }) => {
                 </MenuButton>
                 <MenuList>
                   {team.players?.map((player) => (
-                    <MenuItem key={player.id}>
+                    <MenuItem
+                      key={player.id}
+                      width="100%"
+                      backgroundColor="green"
+                    >
                       {player.name} ({player.role})
                     </MenuItem>
                   ))}

@@ -11,43 +11,62 @@ import {
   GridItem,
   Heading,
   Image,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
   Stack,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useUserContext } from "../context/UserProvider";
 import { useSocketContext } from "../context/SocketProvider";
 
 const TeamsSection = () => {
+  const [sliderValue, setSliderValue] = useState(2500000);
   const {
     teams,
     bids,
     setBids,
     currPlayer,
-    setCurrPlayer,
     startAuction,
     currIdx,
-    setCurrIdx,
     currHighest,
     playerSold,
+    myWithdraw,
+    setMyWithdraw,
+    sliderActive,
+    setSilderActive,
   } = useTeamContext();
-  console.log(teams);
+
   const { userDetails } = useUserContext();
   const { socket } = useSocketContext();
   const [myBid, setMyBid] = useState(false); //true means disbale
-  const [myWithdraw, setMyWithdraw] = useState(true);
-
-  const increaseBids = (currTeam) => {
-    console.log("this prev bid --", bids, currTeam);
-
-    const newBids = { ...bids };
-    if (Object.keys(bids).length === 0) {
-      newBids[currTeam] = currPlayer.base_price;
+  console.log(sliderActive);
+  console.log("all bids", bids);
+  const showValue = (value) => {
+    if (value < 10000000) {
+      return value / 100000 + "Lakhs";
     } else {
-      newBids[currTeam] = currPlayer.final_price + 2500000;
+      return value / 10000000 + "Cr";
     }
-    console.log("currPlayer", currPlayer);
-    setBids(newBids);
+  };
+  const increaseBids = (currTeam, sliderActive) => {
+    console.log("this prev bid --", bids, currTeam, sliderActive);
+    let newBids;
+    if (sliderActive === "FINAL-BID") {
+      newBids = { [currTeam]: currPlayer.final_price + sliderValue };
+    } else {
+      newBids = { ...bids };
 
+      if (Object.keys(bids).length === 0) {
+        newBids[currTeam] = currPlayer.base_price;
+      } else {
+        newBids[currTeam] = currPlayer.final_price + sliderValue;
+      }
+      console.log("currPlayer", currPlayer);
+    }
+    setBids(newBids);
     socket.emit("bid-player", {
       team: currTeam,
       final_price: newBids[currTeam],
@@ -55,18 +74,23 @@ const TeamsSection = () => {
       logo: userDetails.logo,
       currIdx: currIdx,
       currPlayer: currPlayer,
+      STATE: sliderActive,
     });
   };
-  const withDraw = (currTeam) => {
-    console.log("the bids -- ", bids, currTeam, currPlayer);
+  const withDraw = (currTeam, sliderActive) => {
+    console.log("the function is clicked");
+    console.log("the bids --", bids, currTeam, currPlayer, sliderActive);
+
     const tempBid = { ...bids };
     delete tempBid[currTeam];
+    console.log(tempBid);
     setBids(tempBid);
     socket.emit("withraw-bid", {
       team: currTeam,
       bids: tempBid,
       currIdx: currIdx,
       currPlayer,
+      STATE: sliderActive,
     });
   };
   useEffect(() => {
@@ -87,7 +111,7 @@ const TeamsSection = () => {
     }
 
     // Check if the highest scorer is "me"
-    if (highestBidder == userDetails.name) {
+    if (highestBidder === userDetails.name) {
       setMyWithdraw(true);
       setMyBid(true);
     } else if (!bids[userDetails?.name]) {
@@ -98,7 +122,15 @@ const TeamsSection = () => {
       setMyWithdraw(false);
     }
   }, [bids]);
-  console.log(teams);
+
+  useEffect(() => {
+    socket.on("increase-bid", () => {
+      setMyWithdraw(true);
+      setMyBid(false);
+      setSilderActive("FINAL-BID");
+    });
+  }, [socket]);
+
   return (
     <Grid templateColumns="repeat(4, 1fr)" gap={6} m={6}>
       {teams?.map((team, index) => (
@@ -133,54 +165,89 @@ const TeamsSection = () => {
               </Stack>
             </CardBody>
 
-            {userDetails.name == team.name && startAuction && (
+            {userDetails.name === team.name && startAuction && (
               <>
-                {" "}
                 <Divider />
                 <CardFooter
                   textAlign="center"
                   display="flex"
                   justifyContent="center"
+                  flexDirection="column"
+                  alignItems="center"
+                  gap={4} // Add some spacing between items
                 >
                   {!playerSold && (
-                    <ButtonGroup spacing="2">
-                      <>
-                        <Button
-                          colorScheme="teal"
-                          variant="solid"
-                          mx={2}
-                          isDisabled={
-                            myBid ||
-                            team.purse <
-                              Math.max(
-                                currPlayer.final_price + 2500000,
-                                currPlayer.base_price
-                              )
-                          }
-                          onClick={() => {
-                            increaseBids(team.name);
-                          }}
-                        >
-                          Bid
-                        </Button>
-                        <Button
-                          colorScheme="teal"
-                          variant="solid"
-                          isDisabled={
-                            myWithdraw ||
-                            team.purse <
-                              Math.max(
-                                currPlayer.final_price + 2500000,
-                                currPlayer.base_price
-                              )
-                          }
-                          mx={2}
-                          onClick={() => withDraw(team.name)}
-                        >
-                          Withdraw
-                        </Button>
-                      </>
-                    </ButtonGroup>
+                    <>
+                      <Stack spacing={6} align="center">
+                        {(Object.keys(bids).length > 0 ||
+                          (sliderActive !== "SELLING" &&
+                            currHighest !== team.name)) && (
+                          <Slider
+                            aria-label="slider-ex"
+                            min={sliderActive !== "SELLING" ? 0 : 2500000}
+                            max={100000000}
+                            step={2500000}
+                            value={sliderValue}
+                            onChange={(value) => setSliderValue(value)}
+                            width="80%"
+                          >
+                            <SliderTrack>
+                              <SliderFilledTrack />
+                            </SliderTrack>
+                            <SliderThumb>
+                              <Tooltip
+                                hasArrow
+                                label={showValue(sliderValue)}
+                                placement="top"
+                                isOpen
+                              >
+                                <SliderThumb />
+                              </Tooltip>
+                            </SliderThumb>
+                          </Slider>
+                        )}
+
+                        {/* Button Group */}
+                        <ButtonGroup spacing={4}>
+                          <Button
+                            colorScheme="teal"
+                            variant="solid"
+                            isDisabled={
+                              (sliderActive !== "SELLING" &&
+                                currHighest !== team.name) ||
+                              myBid ||
+                              team.purse <
+                                Math.max(
+                                  currPlayer.final_price + sliderValue,
+                                  currPlayer.base_price
+                                )
+                            }
+                            onClick={() =>
+                              increaseBids(team.name, sliderActive)
+                            }
+                          >
+                            Bid
+                          </Button>
+
+                          <Button
+                            colorScheme="teal"
+                            variant="solid"
+                            isDisabled={
+                              sliderActive !== "SELLING" ||
+                              myWithdraw ||
+                              team.purse <
+                                Math.max(
+                                  currPlayer.final_price + sliderValue,
+                                  currPlayer.base_price
+                                )
+                            }
+                            onClick={() => withDraw(team.name, sliderActive)}
+                          >
+                            Withdraw
+                          </Button>
+                        </ButtonGroup>
+                      </Stack>
+                    </>
                   )}
                 </CardFooter>
               </>

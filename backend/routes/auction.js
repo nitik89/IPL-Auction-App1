@@ -88,9 +88,11 @@ router.put("/player-sold", async (req, res) => {
   try {
     const { id } = req.query;
     const { teamName, playerDetail, sold } = req.body;
+    console.log("body -- ", req.query, req.body);
     const { final_price } = playerDetail;
+    let auction;
     if (sold) {
-      await Auction.findOneAndUpdate(
+      auction = await Auction.findOneAndUpdate(
         { _id: id, "teams.name": teamName },
         {
           $push: { playersSold: playerDetail, "teams.$.players": playerDetail },
@@ -98,19 +100,19 @@ router.put("/player-sold", async (req, res) => {
         },
         { new: true }
       );
-      res.status(200).json({ message: "Player Saved" });
     } else {
-      await Auction.findOneAndUpdate(
+      auction = await Auction.findOneAndUpdate(
         { _id: id },
         {
           $push: { unsold: playerDetail },
         },
         { new: true }
       );
-      res.status(200).json({ message: "Player Saved" });
     }
+    const updatedTeam = auction.teams.find((team) => team.name === teamName);
+    res.status(200).json(updatedTeam);
   } catch (err) {
-    console.log(err);
+    console.log("error", err.message);
     res.status(422).json({ message: "Error spotted", err });
   }
 });
@@ -163,7 +165,9 @@ router.get("/get-auction-players", async (req, res) => {
     const playersNotBeShown = [...unSoldPlayers, ...soldPlayers].map(
       (player) => player._id
     );
-    const players = await Player.find({ _id: { $nin: playersNotBeShown } });
+    const players = await Player.find({
+      _id: { $nin: playersNotBeShown },
+    }).sort({ prev_team_name: -1 });
 
     res.status(200).json({ message: "Auction Players", players });
   } catch (err) {

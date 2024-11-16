@@ -43,6 +43,10 @@ const playerSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  final_team: {
+    type: String,
+    required: true,
+  },
 });
 
 mongoose.model("players", playerSchema);

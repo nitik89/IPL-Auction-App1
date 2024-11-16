@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Stat, StatLabel, StatNumber } from "@chakra-ui/react";
+import { Stat, StatLabel, StatNumber, useDisclosure } from "@chakra-ui/react";
 import { useSocketContext } from "../context/SocketProvider";
 import { useTeamContext } from "../context/TeamProvider";
 import { Button, Container, Grid, useToast } from "@chakra-ui/react";
@@ -7,6 +7,7 @@ import Squads from "./Squads";
 import Summary from "./Summary";
 import { useUserContext } from "../context/UserProvider";
 import axios from "axios";
+import RTMPopup from "./RTMPopup";
 
 const Commentary = () => {
   const [message, setMessage] = useState("");
@@ -15,10 +16,11 @@ const Commentary = () => {
   const [time, setTime] = useState(0);
   const { socket } = useSocketContext();
   const [isOpen, setIsOpen] = useState(false);
-  const [currPlayers, setCurrPlayers] = useState([]);
+  const [prevTeam, setPrevTeam] = useState("");
   const handleClose = () => setIsOpen(false);
   const handleCloseSummary = () => setSummaryOpen(false);
   const toast = useToast();
+  const { isOpen: isOpended, onOpen, onClose } = useDisclosure();
   const {
     setTeams,
     teams,
@@ -33,10 +35,14 @@ const Commentary = () => {
     setPlayerList,
     playersList,
     currIdx,
+    bids,
+    sliderActive,
+    setSilderActive,
+    setMyWithdraw,
   } = useTeamContext();
 
   const { userDetails } = useUserContext();
-  console.log("currPlayer", currPlayer, playersList);
+  console.log("slider state", sliderActive);
 
   const handleCopy = async () => {
     try {
@@ -82,6 +88,8 @@ const Commentary = () => {
       setTitle(timerTitle);
       setPlayerSold(false);
       setBids({});
+      setSilderActive("SELLING");
+      setMyWithdraw(true);
       socket.emit("check-unsold", { currPlayer, currIdx });
     };
 
@@ -126,6 +134,20 @@ const Commentary = () => {
       setStartAuction(startAuction);
       setTeams(teams);
     };
+    const handleRTMRequest = ({ prev_team }) => {
+      setPrevTeam(prev_team);
+      if (prev_team === currPlayer.prev_team_name) {
+        console.log("open it", prev_team, currPlayer.prev_team_name);
+        onOpen();
+      } else {
+        console.log("no open", prevTeam, currPlayer.prev_team_name);
+        onClose();
+      }
+    };
+    const handleFinalRetain = () => {
+      setSilderActive("FINAL-SELLING");
+      onOpen();
+    };
 
     socket.on("joined-room", handleJoinedRoom);
     socket.on("team-left", handleTeamLeft);
@@ -138,6 +160,8 @@ const Commentary = () => {
     socket.on("start-auction", handleAuctionStart);
     socket.on("load-player", handleLoadNextPlayer);
     socket.on("disconnect", handleDisconnected);
+    socket.on("rtm-ask", handleRTMRequest);
+    socket.on("final-retain", handleFinalRetain);
 
     return () => {
       socket.off("joined-room", handleJoinedRoom);
@@ -147,6 +171,7 @@ const Commentary = () => {
       socket.off("withdrawn-bid", handleWithdrawnBid);
       socket.off("player-selling", handleSellingPlayer);
       socket.off("timer-update", handleTimer);
+      socket.off("rtm-ask", handleRTMRequest);
     };
   }, [socket, currPlayer, setCurrPlayer, teams, setTeams]);
 
@@ -185,14 +210,49 @@ const Commentary = () => {
       console.error("Error fetching players: ", error);
     }
   };
+  const handleYes = () => {
+    if (sliderActive === "FINAL-SELLING") {
+      const values = Object.values(bids);
+      const finalTeam = currPlayer.prev_team_name;
+      const finalSellingBid = { [finalTeam]: values[0] };
+      setBids(finalSellingBid);
+      socket.emit("withraw-bid", {
+        team: finalTeam,
+        bids: finalSellingBid,
+        currIdx: currIdx,
+        currPlayer,
+        STATE: sliderActive,
+      });
+    } else {
+      socket.emit("rtm-request-accepted", { currPlayer, bids });
+    }
+    onClose();
+  };
 
+  const handleNo = () => {
+    onClose();
+  };
   useEffect(() => {
     fetchPlayers();
   }, [userDetails]);
-
+  console.log(
+    currPlayer?.prev_team_name?.length,
+    prevTeam?.length,
+    currPlayer?.prev_team_name === prevTeam,
+    isOpended
+  );
   return (
     <Container centerContent>
       <Grid templateColumns="1fr " width="100%" gap={4} p={4}>
+        {currPlayer?.prev_team_name === prevTeam && isOpended && (
+          <RTMPopup
+            isOpened={isOpended}
+            onClose={onClose}
+            currentPlayer={currPlayer}
+            handleYes={handleYes}
+            handleNo={handleNo}
+          />
+        )}
         <Button width="100%" onClick={handleCopy}>
           Copy Room ID
         </Button>
