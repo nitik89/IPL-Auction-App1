@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Stat, StatLabel, StatNumber, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Icon,
+  Stat,
+  StatLabel,
+  StatNumber,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useSocketContext } from "../context/SocketProvider";
 import { useTeamContext } from "../context/TeamProvider";
 import { Button, Container, Grid, useToast } from "@chakra-ui/react";
@@ -8,6 +15,12 @@ import Summary from "./Summary";
 import { useUserContext } from "../context/UserProvider";
 import axios from "axios";
 import RTMPopup from "./RTMPopup";
+import {
+  MdFileCopy,
+  MdOutlineAddChart,
+  MdOutlineBarChart,
+} from "react-icons/md";
+import { FaUsers } from "react-icons/fa";
 
 const Commentary = () => {
   const [message, setMessage] = useState("");
@@ -21,6 +34,7 @@ const Commentary = () => {
   const handleCloseSummary = () => setSummaryOpen(false);
   const toast = useToast();
   const { isOpen: isOpended, onOpen, onClose } = useDisclosure();
+
   const {
     setTeams,
     teams,
@@ -38,12 +52,23 @@ const Commentary = () => {
     bids,
     sliderActive,
     setSilderActive,
+    setColors,
     setMyWithdraw,
+    colorsSet,
   } = useTeamContext();
-
+  console.log("colors", colorsSet);
   const { userDetails } = useUserContext();
-  console.log("slider state", sliderActive);
 
+  useEffect(() => {
+    const myObj = {};
+    teams?.forEach((team) => {
+      myObj[team.name] = {
+        primaryColor: team?.primaryColor,
+        secondaryColor: team?.secondaryColor,
+      };
+    });
+    setColors(myObj);
+  }, [teams]);
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(userDetails.roomId);
@@ -94,7 +119,7 @@ const Commentary = () => {
     };
 
     const handlePlayerUnsold = ({ currPlayer: oldPlayer, currIdx }) => {
-      setMessage(`${oldPlayer.name} is Unsold`);
+      setMessage(`Player is Unsold`);
       setPlayerSold(true);
       socket.emit("load-next", { currIdx, currPlayer });
     };
@@ -106,7 +131,7 @@ const Commentary = () => {
     }) => {
       const keys = Object.keys(bids);
       if (keys.length === 1) {
-        setMessage(`${oldPlayer?.name} is sold to ${keys[0]}`);
+        setMessage(`Player is sold to ${keys[0]}`);
         setTeams(teams);
         setPlayerSold(true);
         socket.emit("load-next", { currIdx, currPlayer: playersList[currIdx] });
@@ -162,6 +187,9 @@ const Commentary = () => {
     socket.on("disconnect", handleDisconnected);
     socket.on("rtm-ask", handleRTMRequest);
     socket.on("final-retain", handleFinalRetain);
+    socket.on("increase-bid", () => {
+      setMessage("Asking for the increase in the bid");
+    });
 
     return () => {
       socket.off("joined-room", handleJoinedRoom);
@@ -246,7 +274,14 @@ const Commentary = () => {
 
   return (
     <Container centerContent>
-      <Grid templateColumns="1fr " width="100%" gap={4} p={4}>
+      <Grid
+        templateColumns="repeat(3,1fr)"
+        gap={4}
+        bottom="20px"
+        right="20px"
+        position="fixed"
+        color="white"
+      >
         {currPlayer?.prev_team_name === prevTeam && isOpended && (
           <RTMPopup
             isOpened={isOpended}
@@ -257,22 +292,118 @@ const Commentary = () => {
             state={sliderActive}
           />
         )}
-        <Button width="100%" onClick={handleCopy}>
-          Copy Room ID
+        <Button
+          onClick={handleCopy}
+          colorScheme="blue"
+          borderRadius="full"
+          p={4} // Adjust padding for a smaller button
+          bg="blue.400" // Neon-like blue background
+          _hover={{
+            bg: "blue.500", // Brighter blue on hover
+            transform: "scale(1.05)",
+            boxShadow: "0 0 10px 2px rgba(0, 123, 255, 0.7)", // Neon glow on hover
+            textShadow: "0 0 5px rgba(0, 123, 255, 0.8)", // Glowing text effect
+          }}
+          _active={{
+            bg: "blue.500",
+            boxShadow: "0 0 10px 2px rgba(0, 123, 255, 0.7)", // Keep the glow on active
+            textShadow: "0 0 5px rgba(0, 123, 255, 0.8)", // Glowing text effect when clicked
+          }}
+          boxShadow="lg"
+          transition="all 0.3s"
+          minWidth="fit-content"
+          height="50px"
+          width="50px"
+        >
+          <Icon as={MdFileCopy} boxSize="24px" color="white" />
         </Button>
-        <Button width="100%" onClick={() => setSummaryOpen(true)}>
-          Auction Summary
+
+        {/* Auction Summary */}
+        <Button
+          onClick={() => setSummaryOpen(true)}
+          borderRadius="full"
+          p={4}
+          bg="green.400" // Neon green background
+          _hover={{
+            bg: "green.500",
+            transform: "scale(1.05)",
+            boxShadow: "0 0 10px 2px rgba(0, 255, 0, 0.7)", // Glowing neon effect on hover
+            textShadow: "0 0 5px rgba(0, 255, 0, 0.8)", // Neon glow around the text
+          }}
+          _active={{
+            bg: "green.500",
+            boxShadow: "0 0 10px 2px rgba(0, 255, 0, 0.7)", // Keep the glow on active
+            textShadow: "0 0 5px rgba(0, 255, 0, 0.8)", // Glow effect when clicked
+          }}
+          boxShadow="lg"
+          transition="all 0.3s"
+          minWidth="fit-content"
+          height="50px"
+          width="50px"
+        >
+          <Icon as={MdOutlineBarChart} boxSize="24px" color="white" />
         </Button>
-        <Button width="100%" onClick={() => setIsOpen(true)}>
-          Squads
+
+        {/* Squads */}
+        <Button
+          onClick={() => setIsOpen(true)}
+          colorScheme="purple"
+          borderRadius="full"
+          p={4}
+          bg="purple.400" // Neon purple background
+          _hover={{
+            bg: "purple.500",
+            transform: "scale(1.05)",
+            boxShadow: "0 0 10px 2px rgba(128, 0, 255, 0.7)", // Glowing neon effect on hover
+            textShadow: "0 0 5px rgba(128, 0, 255, 0.8)", // Neon purple glow around the text
+          }}
+          _active={{
+            bg: "purple.500",
+            boxShadow: "0 0 10px 2px rgba(128, 0, 255, 0.7)", // Keep the glow on active
+            textShadow: "0 0 5px rgba(128, 0, 255, 0.8)", // Glow effect when clicked
+          }}
+          boxShadow="lg"
+          transition="all 0.3s"
+          minWidth="fit-content"
+          height="50px"
+          width="50px"
+        >
+          <Icon as={FaUsers} boxSize="24px" color="white" />
         </Button>
+
         <Squads isOpen={isOpen} handleClose={handleClose} />
         <Summary isOpen={summaryOpen} handleClose={handleCloseSummary} />
         {title && (
-          <Stat mt={4}>
-            <StatLabel>{title}</StatLabel>
-            <StatNumber>{time}</StatNumber>
-          </Stat>
+          <Box
+            position="fixed"
+            top="20px"
+            right="20px"
+            p={4}
+            bg="gray.800" // Dark card background for contrast
+            borderRadius="lg" // Rounded corners for a soft effect
+            boxShadow="0 4px 10px rgba(0, 0, 0, 0.2), 0 4px 20px rgba(0, 0, 0, 0.2)"
+            _hover={{
+              boxShadow: "0 8px 20px rgba(0, 255, 255, 0.5)", // Neon-like hover shadow
+              transform: "scale(1.05)", // Slight scaling effect on hover
+              transition: "all 0.3s ease",
+            }}
+            transition="all 0.3s ease" // Optional: add a semi-transparent background for readability
+            color="gray.200"
+            zIndex="10"
+            display="flex"
+            flexDirection="column"
+            alignItems="flex-start" // Align content to the left
+            justifyContent="flex-start"
+          >
+            <Stat>
+              <StatLabel fontSize="lg" fontWeight="bold" mb={1}>
+                {title}
+              </StatLabel>
+              <StatNumber fontSize="xl" textAlign="center" fontWeight="bold">
+                {time || "00:00"}
+              </StatNumber>
+            </Stat>
+          </Box>
         )}
       </Grid>
     </Container>

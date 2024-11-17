@@ -10,9 +10,11 @@ router.get("/sold-players", async (req, res) => {
   try {
     const { id } = req.query;
     const auctionRoom = await Auction.findOne({ _id: id });
+    const playersSold = auctionRoom.playersSold;
+    playersSold.sort((a, b) => b.final_price - a.final_price);
     res.status(200).json({
       message: "Players Fetched",
-      soldPlayers: auctionRoom.playersSold,
+      soldPlayers: playersSold,
     });
   } catch (err) {
     res.status(422).json({ message: "Could get the players" });
@@ -188,8 +190,8 @@ router.post("/retain-player", async (req, res) => {
     cappedPlayersCount,
   } = req.body;
   console.log(uncappedPlayersCount, cappedPlayersCount);
-  let unCappedRTMS = 5,
-    CappedRTMS = 2;
+  let unCappedRTMS = 2,
+    CappedRTMS = 5;
   if (uncappedPlayersCount + cappedPlayersCount < 6) {
     unCappedRTMS = uncappedPlayersCount;
     CappedRTMS = cappedPlayersCount;
@@ -197,6 +199,10 @@ router.post("/retain-player", async (req, res) => {
       CappedRTMS++;
     }
   }
+  const retainedPlayersArr = retainedPlayers.map((player) => {
+    player.final_team = teamName;
+    return player;
+  });
 
   console.log(unCappedRTMS, CappedRTMS);
   try {
@@ -204,8 +210,8 @@ router.post("/retain-player", async (req, res) => {
       { _id: auctionId, "teams.name": teamName },
       {
         $push: {
-          "teams.$.players": { $each: retainedPlayers },
-          playersSold: { $each: retainedPlayers },
+          "teams.$.players": { $each: retainedPlayersArr },
+          playersSold: { $each: retainedPlayersArr },
         },
         $set: { "teams.$.purse": amount },
         $inc: {

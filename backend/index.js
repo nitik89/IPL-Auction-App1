@@ -97,21 +97,23 @@ io.on("connection", (socket) => {
     const previousTeam = teams.find(
       (team) => team.name === currPlayer.prev_team_name
     );
-
-    if (previousTeam?.name !== team && STATE == "SELLING") {
-      console.log("ask for RTM");
-      const targetSocketId = clients.get(previousTeam.name);
+    console.log("previous Team", team, previousTeam);
+    if (previousTeam && previousTeam?.name !== team && STATE == "SELLING") {
+      console.log("ask for RTM", previousTeam);
+      const targetSocketId = clients.get(previousTeam?.name);
       console.log("socket", targetSocketId);
       //also check the team has rtm or not
-      io.to(targetSocketId).emit("rtm-ask", {
-        prev_team: currPlayer.prev_team_name,
-        currPlayer,
-        currIdx,
-        roomId,
-        final_team: keys[0],
-        final_price: bids[keys[0]],
-        bids,
-      });
+      if (targetSocketId) {
+        io.to(targetSocketId).emit("rtm-ask", {
+          prev_team: currPlayer.prev_team_name,
+          currPlayer,
+          currIdx,
+          roomId,
+          final_team: keys[0],
+          final_price: bids[keys[0]],
+          bids,
+        });
+      }
     } else if (STATE == "FINAL-BID") {
       console.log("Final bid given");
       const targetSocketId = clients.get(currPlayer.prev_team_name);
@@ -273,7 +275,12 @@ io.on("connection", (socket) => {
         (player) => player.name == currPlayer.name
       );
       clearInterval(withdrawBidInterval);
-      withdrawBidTimeLeft = 10;
+      if (STATE == "FINAL-BID") {
+        withdrawBidTimeLeft = 0;
+      } else {
+        withdrawBidTimeLeft = 10;
+      }
+
       if (keys.length == 1 && !findPlayer) {
         withdrawBidInterval = setInterval(async () => {
           withdrawBidTimeLeft--;

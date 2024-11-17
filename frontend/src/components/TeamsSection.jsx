@@ -10,6 +10,7 @@ import {
   Grid,
   GridItem,
   Heading,
+  Icon,
   Image,
   Slider,
   SliderFilledTrack,
@@ -21,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { useUserContext } from "../context/UserProvider";
 import { useSocketContext } from "../context/SocketProvider";
+import { FaHandPaper, FaMoneyCheckAlt } from "react-icons/fa";
 
 const TeamsSection = () => {
   const [sliderValue, setSliderValue] = useState(2500000);
@@ -38,7 +40,6 @@ const TeamsSection = () => {
     sliderActive,
     setSilderActive,
   } = useTeamContext();
-
   const { userDetails } = useUserContext();
   const { socket } = useSocketContext();
   const [myBid, setMyBid] = useState(false); //true means disbale
@@ -142,13 +143,24 @@ const TeamsSection = () => {
         <GridItem key={index} w="100%">
           <Card
             maxW="sm"
-            height="300px"
+            height="330px"
             width="300px"
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
-            backgroundColor={team.name == currHighest && "gray.200"}
-            bgGradient={`linear(to-br, ${team.primaryColor} 50%, ${team.secondaryColor} 50%)`}
+            backgroundColor={
+              team.name === currHighest ? "gray.200" : "transparent"
+            } // Highlight if it matches
+            bgGradient={`linear(to-l, ${team?.primaryColor} 55%, ${team?.secondaryColor} 45%)`}
+            borderRadius="lg"
+            boxShadow={`0 0 15px 3px ${team?.primaryColor}, 0 0 25px 5px ${team?.secondaryColor}`} // Neon glow
+            transition="all 0.3s ease-in-out"
+            _hover={{
+              boxShadow: `0 0 30px 6px ${team?.primaryColor}, 0 0 40px 8px ${team?.secondaryColor}`, // Neon effect on hover
+              transform: "scale(1.05)", // Optional: add a scale effect on hover
+            }}
+            p={4}
+            color="white"
           >
             <CardBody
               textAlign="center"
@@ -168,7 +180,18 @@ const TeamsSection = () => {
                 mx="auto"
               />
               <Stack mt="6" spacing="3">
-                <Heading size="md">{team.name}</Heading>
+                <Heading
+                  size="md"
+                  fontWeight="bold" // Makes the text bold
+                  color="white" // Color of the text itself (white to contrast the black outline)
+                  textShadow="0 0 10px rgba(0, 0, 0, 0.6)" // Adds a subtle shadow for neon effect
+                  style={{
+                    WebkitTextStroke: "0.5px black", // Adds a black outline around the text
+                    textStroke: "0.5px black", // For better compatibility with some browsers
+                  }}
+                >
+                  {team.name}
+                </Heading>
               </Stack>
             </CardBody>
 
@@ -215,10 +238,25 @@ const TeamsSection = () => {
                         )}
 
                         {/* Button Group */}
-                        <ButtonGroup spacing={4}>
+                        <ButtonGroup spacing={6}>
                           <Button
-                            colorScheme="teal"
+                            colorScheme="green"
                             variant="solid"
+                            backgroundColor={team.primaryColor}
+                            _hover={{
+                              // Darker teal for hover
+                              transform: "scale(1.05)", // Slight scale effect on hover
+                              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)", // Subtle shadow on hover
+                            }}
+                            _active={{
+                              // Darker teal when the button is clicked
+                              transform: "scale(0.98)", // Slight shrink effect when pressed
+                            }}
+                            _disabled={{
+                              bg: "gray.400", // Disable color
+                              cursor: "not-allowed", // Change cursor to indicate it's disabled
+                              boxShadow: "none",
+                            }}
                             isDisabled={
                               (sliderActive !== "SELLING" &&
                                 currHighest !== team.name) ||
@@ -232,13 +270,29 @@ const TeamsSection = () => {
                             onClick={() =>
                               increaseBids(team.name, sliderActive)
                             }
+                            leftIcon={<Icon as={FaHandPaper} />} // Add icon to button
                           >
                             Bid
                           </Button>
 
                           <Button
-                            colorScheme="teal"
                             variant="solid"
+                            backgroundColor={team?.secondaryColor}
+                            color="white"
+                            _hover={{
+                              // Darker red for hover
+                              transform: "scale(1.05)", // Slight scale effect on hover
+                              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)", // Subtle shadow on hover
+                            }}
+                            _active={{
+                              // Darker red when the button is clicked
+                              transform: "scale(0.98)", // Slight shrink effect when pressed
+                            }}
+                            _disabled={{
+                              bg: "gray.400", // Disable color
+                              cursor: "not-allowed", // Change cursor to indicate it's disabled
+                              boxShadow: "none",
+                            }}
                             isDisabled={
                               sliderActive !== "SELLING" ||
                               myWithdraw ||
@@ -249,6 +303,7 @@ const TeamsSection = () => {
                                 )
                             }
                             onClick={() => withDraw(team.name, sliderActive)}
+                            leftIcon={<Icon as={FaMoneyCheckAlt} />} // Add icon to button
                           >
                             Withdraw
                           </Button>

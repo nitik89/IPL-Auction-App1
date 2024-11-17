@@ -3,11 +3,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ChakraProvider } from "@chakra-ui/react";
+import { Box, ChakraProvider } from "@chakra-ui/react";
 import { UserProvider } from "./context/UserProvider";
 import { SocketProvider } from "./context/SocketProvider";
 import { TeamProvider } from "./context/TeamProvider";
-import customTheme from "./theme";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,7 +15,18 @@ root.render(
       <TeamProvider>
         <SocketProvider>
           <ChakraProvider>
-            <App />
+            <Box
+              bg="gray.800"
+              color="white"
+              minHeight="100vh"
+              boxShadow="inset 0 0 100px rgba(0, 0, 0, 0.7)"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+              p={5}
+            >
+              <App />
+            </Box>
           </ChakraProvider>
         </SocketProvider>
       </TeamProvider>

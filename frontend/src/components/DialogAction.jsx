@@ -29,7 +29,7 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
     let cappedPlayersCount = cappedPlayers.length;
     console.log("players", uncappedPlayersCount, cappedPlayersCount);
 
-    finalRetentionList.forEach((player) => {
+    finalRetentionList?.forEach((player) => {
       player.is_retained = true;
       player.is_sold = true;
       amount += player.final_price;
@@ -47,8 +47,10 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
         }
       );
       const updatedTeamData = updatedTeam.data;
-      socket.emit("joinRoom", { ...updatedTeamData, roomId, name, purse });
-      history("/dashboard");
+      if (updatedTeamData) {
+        socket.emit("joinRoom", { ...updatedTeamData, roomId, name, purse });
+        history("/dashboard");
+      }
     } catch (err) {
       console.log("Error in retaining players", err);
     }
@@ -61,7 +63,11 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
       scrollBehavior="inside"
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent
+        bg="gray.800"
+        color="white"
+        boxShadow="inset 0 0 100px rgba(0, 0, 0, 0.7)"
+      >
         <ModalHeader>Retained Players</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -85,10 +91,29 @@ const DialogAction = ({ onClose, isOpen, uncappedPlayers, cappedPlayers }) => {
           </Grid>
         </ModalBody>
         <ModalFooter>
-          <Button variantColor="blue" mr={3} onClick={handlePlayerRetain}>
+          <Button
+            bgColor={userDetails?.primaryColor}
+            color="white"
+            _hover={{
+              bg: `${userDetails?.primaryColor}`,
+              opacity: 0.8,
+            }}
+            mr={3}
+            onClick={handlePlayerRetain}
+          >
             Save
           </Button>
-          <Button onClick={onClose}>Close</Button>
+          <Button
+            bgColor={userDetails?.secondaryColor}
+            _hover={{
+              bg: `${userDetails?.secondaryColor}`,
+              opacity: 0.8,
+            }}
+            color="white"
+            onClick={onClose}
+          >
+            Close
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
